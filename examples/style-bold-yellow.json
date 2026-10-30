@@ -1,0 +1,15 @@
+{
+  "id": "bold-yellow-1",
+  "name": "Bold Kuning Bawah",
+  "offsetY": 0.34,
+  "style": {
+    "fontFamily": "Inter",
+    "fontSize": 0.085,
+    "fontWeight": 800,
+    "color": "#FFFFFF",
+    "strokeColor": "#000000",
+    "strokeWidth": 0.006,
+    "shadow": true,
+    "maxWidth": 0.9
+  }
+}

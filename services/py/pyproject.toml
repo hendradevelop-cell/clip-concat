@@ -1,0 +1,29 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "videoflow"
+version = "0.1.0"
+description = "Pipeline otomasi video (Clipper/News/Avatar) di atas Concat (MCP stdio)"
+requires-python = ">=3.11"
+dependencies = [
+  "fastapi>=0.115",
+  "uvicorn[standard]>=0.30",
+  "pydantic>=2.7",
+  "pydantic-settings>=2.3",
+  "psycopg[binary,pool]>=3.2",
+  "celery[redis]>=5.4",
+  "redis>=5.0",
+  "yt-dlp>=2025.10.7",
+]
+
+[project.optional-dependencies]
+captions = ["faster-whisper>=1.1.0", "av>=12,<19"]
+dev = ["pytest>=8.0"]
+
+[tool.setuptools.packages.find]
+include = ["videoflow*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

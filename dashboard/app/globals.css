@@ -1,0 +1,176 @@
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font: 15px/1.6 ui-sans-serif, system-ui, -apple-system, sans-serif;
+  color: #16181d;
+  background: #f6f7f9;
+}
+
+main { max-width: 1060px; margin: 0 auto; padding: 48px 20px 80px; }
+
+/* Form di kiri, pratinjau 9:16 menempel di kanan dan ikut bergulir. */
+.shell { display: grid; grid-template-columns: minmax(0, 1fr) 268px; gap: 20px; align-items: start; }
+@media (max-width: 880px) { .shell { grid-template-columns: 1fr; } .side { position: static; } }
+.side { position: sticky; top: 24px; }
+
+fieldset { border: 1px solid #e3e6ea; border-radius: 10px; margin: 0 0 16px; padding: 14px 16px 16px; }
+legend { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; padding: 0 6px; }
+
+.slider { display: grid; grid-template-columns: 1fr 84px; gap: 10px; align-items: center; }
+input[type="range"] { width: 100%; padding: 0; accent-color: #4c6ef5; }
+input[type="color"] { width: 100%; height: 34px; padding: 2px; }
+.check { display: flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; }
+.check input { width: auto; }
+.hint { font-size: 12px; color: #868e96; margin: 4px 0 0; }
+
+.chips { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 8px; }
+.chip { border: 1px solid #d4d8de; background: #f8f9fb; color: #16181d; border-radius: 99px; padding: 5px 11px; font-size: 12.5px; font-weight: 600; }
+.chip:hover { background: #eef1f5; }
+
+/* Tombol segmental pilihan tunggal, dipakai untuk resolusi output. */
+.seg { display: inline-flex; margin-top: 6px; border: 1px solid #d4d8de; border-radius: 9px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; background: #f8f9fb; color: #16181d;
+  padding: 8px 18px; font-size: 13px; font-weight: 700; cursor: pointer; }
+.seg button + button { border-left: 1px solid #d4d8de; }
+.seg button:hover { background: #eef1f5; }
+.seg button.on { background: #4c6ef5; color: #fff; }
+.seg button.on:hover { background: #4c6ef5; }
+
+textarea { width: 100%; padding: 9px 11px; border: 1px solid #d4d8de; border-radius: 8px; font: inherit; resize: vertical; min-height: 74px; }
+textarea:focus { outline: 2px solid #4c6ef5; outline-offset: 1px; }
+
+/* Bingkai iPhone. Layar di dalamnya tetap kotak 9:16 dengan container query,
+   jadi 1cqh = 1% tinggi frame dan angka kontrol bisa dipakai apa adanya. */
+.phone { position: relative; padding: 10px; border-radius: 42px; max-width: 320px; margin: 0 auto;
+  background: linear-gradient(160deg, #3b4048, #14161b 60%);
+  box-shadow: 0 18px 40px rgba(16, 20, 28, .28), inset 0 0 0 1px rgba(255, 255, 255, .08); }
+.phone::before, .phone::after { content: ""; position: absolute; width: 3px; border-radius: 2px; background: #23272e; }
+.phone::before { left: -3px; top: 20%; height: 5%; box-shadow: 0 30px 0 #23272e, 0 58px 0 #23272e; }
+.phone::after { right: -3px; top: 28%; height: 11%; }
+.phone.wide { padding: 6px; border-radius: 14px; }
+.phone.wide::before, .phone.wide::after { display: none; }
+
+.prev { container-type: size; position: relative; aspect-ratio: 9 / 16; overflow: hidden;
+  border-radius: 33px; background: #000; }
+.prev.wide { aspect-ratio: 16 / 9; border-radius: 9px; }
+.scene { position: relative; width: 100%; height: 100%; background: linear-gradient(160deg, #74a3d6 0%, #2b6cb0 55%, #1a365d 100%); }
+
+/* Chrome iPhone diukur dengan cqw: kotaknya 9:16, jadi cqh jauh lebih besar
+   dari cqw dan ikon status akan melar kalau dipatok ke tinggi. */
+.island { position: absolute; top: 1.6cqw; left: 50%; transform: translateX(-50%);
+  width: 27cqw; height: 8cqw; border-radius: 99px; background: #05060a;
+  box-shadow: inset 0 0 0 1px rgba(255, 255, 255, .07); }
+.status { position: absolute; top: 0; left: 0; right: 0; height: 11.5cqw; z-index: 2;
+  display: flex; align-items: center; justify-content: space-between; padding: 0 7cqw;
+  font: 600 5cqw/1 -apple-system, "Segoe UI", sans-serif; color: #fff; }
+.batt { position: relative; width: 9cqw; height: 4.4cqw; border: 1px solid rgba(255, 255, 255, .85); border-radius: 1.5cqw; }
+.batt::after { content: ""; position: absolute; left: 0.6cqw; top: 0.6cqw; bottom: 0.6cqw; width: 58%; background: #fff; border-radius: 0.8cqw; }
+.home { position: absolute; bottom: 1.6cqw; left: 50%; transform: translateX(-50%);
+  width: 30cqw; height: 1cqw; border-radius: 99px; background: rgba(255, 255, 255, .9); }
+
+.prev .guide { position: absolute; left: 0; right: 0; border-top: 1px dashed rgba(255,255,255,.35); }
+.prev .guide.top { top: 12cqh; }
+.prev .guide.bottom { top: 88cqh; }
+.prev .cap {
+  position: absolute; left: 50%; top: calc(50cqh + var(--oy) * 50cqh);
+  transform: translate(-50%, -50%); width: calc(var(--mw) * 100cqw);
+  font-family: var(--fam); font-weight: var(--fw); font-size: calc(var(--fs) * 143cqh);
+  line-height: 1.12; text-align: center; color: var(--col); text-transform: uppercase;
+  -webkit-text-stroke: calc(var(--sw) * 100cqh) var(--scol); paint-order: stroke fill;
+  text-shadow: var(--sh); background: var(--bg);
+  padding: calc(0.018 * 100cqh) calc(0.0315 * 100cqh); border-radius: calc(0.0135 * 100cqh);
+}
+.prev .cap .line { display: block; }
+.prev .cap.off { font-size: 3.5cqh; color: rgba(255,255,255,.7); text-transform: none; -webkit-text-stroke: 0; background: none; }
+
+.pvtext { display: block; margin-top: 14px; font-size: 13px; font-weight: 600; }
+.pvtext input { margin-top: 6px; }
+
+h1 { font-size: 22px; margin: 0 0 4px; }
+.sub { margin: 0 0 28px; color: #6b7280; }
+
+.card {
+  background: #fff;
+  border: 1px solid #e3e6ea;
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px 16px; }
+.full { grid-column: 1 / -1; }
+
+label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 6px; }
+
+input, select {
+  width: 100%;
+  padding: 9px 11px;
+  border: 1px solid #d4d8de;
+  border-radius: 8px;
+  font: inherit;
+  background: #fff;
+}
+input:focus, select:focus { outline: 2px solid #4c6ef5; outline-offset: 1px; }
+
+.row { display: flex; align-items: center; gap: 12px; margin-top: 18px; }
+
+button {
+  padding: 10px 18px;
+  border: 0;
+  border-radius: 8px;
+  background: #4c6ef5;
+  color: #fff;
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+button:disabled { background: #b6c0d8; cursor: not-allowed; }
+button.ghost { background: #eef1f5; color: #16181d; }
+
+.bar { height: 8px; background: #e9ecf1; border-radius: 99px; overflow: hidden; margin: 6px 0 16px; }
+.bar > i { display: block; height: 100%; background: #4c6ef5; transition: width .3s; }
+
+.prog { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; }
+.pct { font-size: 26px; font-weight: 800; letter-spacing: -.02em; }
+.sect { font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; color: #6b7280; margin: 16px 0 6px; }
+
+/* Konsol log: isinya jejak waktu nyata dari Tracker, jadi jangan dibuat cantik. */
+.log { margin: 0; padding: 12px 14px; border-radius: 8px; background: #0f1115; color: #c9d1d9;
+  font: 12px/1.55 ui-monospace, "Cascadia Mono", Consolas, monospace;
+  white-space: pre-wrap; word-break: break-word; max-height: 260px; overflow-y: auto; }
+.log .info { color: #c9d1d9; }
+.log .done { color: #3fb950; }
+.log .skip { color: #8b949e; }
+.log .error { color: #f85149; }
+
+ul.stages { list-style: none; margin: 0; padding: 0; font-size: 13px; }
+ul.stages li { display: flex; justify-content: space-between; padding: 5px 0; border-bottom: 1px solid #f0f2f5; }
+ul.stages li:last-child { border-bottom: 0; }
+.done { color: #2f9e44; }
+.running { color: #4c6ef5; }
+.skipped { color: #868e96; }
+.failed { color: #e03131; }
+.pending { color: #adb5bd; }
+.queued, .cancelled { color: #868e96; }
+
+/* Panel antrean: grid supaya persen dan bar sejajar antar baris. */
+ul.q { list-style: none; margin: 10px 0 0; padding: 0; font-size: 13px; }
+.qrow { display: grid; grid-template-columns: 74px minmax(0, 1fr) 180px 60px 38px 62px;
+  gap: 10px; align-items: center; padding: 6px 4px; border-bottom: 1px solid #f0f2f5; }
+.qrow:last-child { border-bottom: 0; }
+.qrow.on { background: #f5f7ff; border-radius: 6px; }
+.qid { padding: 3px 4px; background: none; color: #4c6ef5; font: 12px/1.4 ui-monospace, "Cascadia Mono", Consolas, monospace; font-weight: 600; }
+.qid:hover { background: #e7ecff; }
+.qsrc { color: #6b7280; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.qbar { height: 6px; background: #e9ecf1; border-radius: 99px; overflow: hidden; }
+.qbar > i { display: block; height: 100%; background: #4c6ef5; transition: width .3s; }
+.qpct { text-align: right; font-variant-numeric: tabular-nums; }
+.qtime { text-align: right; color: #adb5bd; font-size: 12px; }
+button.danger { padding: 5px 10px; font-size: 12px; background: #ffe3e3; color: #c22; }
+button.danger:hover { background: #ffc9c9; }
+
+.err { margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #fff0f0; color: #c22; font-size: 13px; }
+.warnbox { margin-top: 14px; padding: 10px 12px; border-radius: 8px; background: #fff8e6; color: #8a6d1f; font-size: 13px; }
+.note { margin-top: 14px; font-size: 13px; color: #6b7280; }
+.warn { margin: 8px 0 0; font-size: 13px; color: #b45309; }
+video { width: 100%; border-radius: 8px; margin-top: 10px; background: #000; }

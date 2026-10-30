@@ -1,0 +1,27 @@
+# Hanya Postgres + Redis. api dan worker sengaja tidak ada di sini:
+# Concat 0.2.8 build desktop tidak punya server TCP/Network — transpornya
+# MCP stdio, jadi proses concat di-spawn langsung oleh klien. Artinya api
+# (cek health) dan worker (render) HARUS berjalan di mesin yang sama dengan
+# concat binary dan boleh menulis di bawah mcp.writesUnder-nya.
+#
+#   docker compose up -d postgres redis
+#   cd services/py && celery -A videoflow.worker:celery_app worker -Q videoflow --concurrency=1
+#   cd services/py && uvicorn videoflow.api.server:app --port 8000
+services:
+  postgres:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: videoflow
+      POSTGRES_PASSWORD: videoflow
+      POSTGRES_DB: videoflow
+    ports: ["5432:5432"]
+    volumes:
+      - pg:/var/lib/postgresql/data
+      - ./services/py/schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+
+  redis:
+    image: redis:7-alpine
+    ports: ["6379:6379"]
+
+volumes:
+  pg:
